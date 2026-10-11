@@ -5,6 +5,6 @@ dist-ssr
 .DS_Store
 vodovoz-mvp/node_modules
 # данные CMS (база и загруженные файлы) и резервные копии — не в git
-data/
-backups/
+/data/
+/backups/
 .env
