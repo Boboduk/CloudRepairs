@@ -7,31 +7,38 @@ interface Props {
   title: ReactNode;
   lead?: ReactNode;
   actions?: ReactNode;
-  visual?: ReactNode;
+  aside?: ReactNode;
   breadcrumb?: string;
-  size?: "home" | "page";
+  children?: ReactNode;
 }
 
-/** Первый экран страницы: единственный H1 страницы, лид, кнопки и визуал */
-export function PageHero({ eyebrow, title, lead, actions, visual, breadcrumb, size = "page" }: Props) {
+/** Первый экран внутренних страниц: тёмно-синий фон, единственный H1 страницы */
+export function PageHero({ eyebrow, title, lead, actions, aside, breadcrumb, children }: Props) {
   return (
-    <section className={`${styles.hero} ${styles[size]}`}>
-      <div className={styles.glow} aria-hidden="true" />
-      <div className={`container ${styles.grid} ${visual ? styles.withVisual : ""}`}>
-        <div className={styles.copy}>
-          {breadcrumb && (
-            <nav aria-label="Хлебные крошки" className={styles.crumbs}>
-              <Link to="/">Главная</Link>
-              <span aria-hidden="true">/</span>
-              <span aria-current="page">{breadcrumb}</span>
-            </nav>
-          )}
-          {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
-          <h1 className={styles.title}>{title}</h1>
-          {lead && <p className={styles.lead}>{lead}</p>}
-          {actions && <div className={styles.actions}>{actions}</div>}
+    <section className={styles.hero}>
+      <div className={styles.bg} aria-hidden="true">
+        <span className={styles.glowLime} />
+        <span className={styles.glowSky} />
+        <img src="/brand/symbol.png" alt="" className={styles.symbol} width={422} height={511} />
+      </div>
+      <div className={`container ${styles.inner}`}>
+        <div className={`${styles.grid} ${aside ? styles.withAside : ""}`}>
+          <div className={styles.copy}>
+            {breadcrumb && (
+              <nav aria-label="Хлебные крошки" className={styles.crumbs}>
+                <Link to="/">Главная</Link>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">{breadcrumb}</span>
+              </nav>
+            )}
+            {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
+            <h1 className={styles.title}>{title}</h1>
+            {lead && <p className={styles.lead}>{lead}</p>}
+            {actions && <div className={styles.actions}>{actions}</div>}
+          </div>
+          {aside && <div className={styles.aside}>{aside}</div>}
         </div>
-        {visual && <div className={styles.visual}>{visual}</div>}
+        {children}
       </div>
     </section>
   );

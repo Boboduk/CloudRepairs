@@ -1,10 +1,10 @@
-# CloudRepairs — новая версия сайта
+# CloudRepairs — сайт
 
-Современный адаптивный сайт CloudRepairs на **React + TypeScript + Vite** с пререндером страниц
-(каждый URL отдаётся готовым HTML — хорошо для SEO и любого статического хостинга).
+Адаптивный сайт CloudRepairs («Облачные ремонты») на **React + TypeScript + Vite** с пререндером
+страниц: каждый URL отдаётся готовым HTML (SEO, любой статический хостинг).
 
-> ⚠️ Оригинальный сайт был недоступен из среды разработки. Содержание собрано только из
-> проверенных фрагментов; пробелы честно помечены на страницах. Подробности — в [AUDIT.md](AUDIT.md).
+Содержимое — из макета Figma «CloudRepairs» и cloudrepairs.ru; дизайн — новый.
+Что откуда взято и что не перенесено — в [AUDIT.md](AUDIT.md).
 
 ## Запуск
 
@@ -15,68 +15,51 @@ npm run build      # production-сборка в dist/ (с пререндером
 npm run preview    # просмотр сборки: http://localhost:4173
 ```
 
-Требуется Node.js 18+.
+Node.js 18+.
 
 ## Страницы
 
-| URL | Файл |
+| URL | Страница |
 |---|---|
-| `/` | `src/pages/HomePage.tsx` |
-| `/obuchen/` | `src/pages/TrainingPage.tsx` |
-| `/about/` | `src/pages/AboutPage.tsx` |
-| `/vnutyankaya-training/` | `src/pages/InternalTrainingPage.tsx` |
-| любой другой | `src/pages/NotFoundPage.tsx` → `dist/404.html` |
+| `/` | Главная |
+| `/vnutyankaya-training/` | Продукт CloudRepairs: функции, характеристики, область применения, выгоды, тарифы |
+| `/obuchen/` | Обучение и консультация |
+| `/about/` | О нас |
+| остальные | 404 (`dist/404.html`) |
+
+## Дизайн-система
+
+- Цвета (из макета): тёмно-синий `#082765`, текст `#194768`, салатовый `#A3D20C`, кремовый `#FBF8EF`,
+  голубой из логотипа `#29ABE2` — переменные в `src/styles/global.css`.
+- Шрифты: **Unbounded** (заголовки; замена коммерческого Etelka Wide из макета) и **Onest** (текст).
+- Компоненты: `Header` (+ мобильное меню), `Footer` (контакты, якорь `#contacts`), `Section`, `PageHero`,
+  `Button`, `BrowserFrame` (скриншот с увеличением), `SubNav` (липкая навигация по разделам),
+  `CtaBand`, `Icon`, `Seo`, `Layout` (прокрутка к якорям, появление блоков при прокрутке).
 
 ## Структура
 
 ```
-index.html                 шаблон (шрифт Onest, места для пререндера)
-public/                    favicon.svg, robots.txt (+ сюда изображения)
-scripts/prerender.mjs      пререндер страниц, 404.html, sitemap.xml
-src/
-  content/                 ВСЁ содержание сайта (тексты, контакты, SEO) — правится здесь
-    site.ts                навигация, контакты, ссылка «Войти в систему»
-    seo.ts                 title / description страниц
-    home.ts training.ts about.ts internalTraining.ts
-  components/              Header (+ мобильное меню), Footer, Logo, Button, Section, PageHero,
-                           FeatureGrid, ContactsBlock, Gallery (лайтбокс), Pending, Seo, Icon, Layout
-  pages/                   страницы + общие стили pages.module.css
-  styles/global.css        дизайн-система: цвета, типографика, сетка, отступы
-  App.tsx                  маршруты
-  main.tsx                 клиентский вход (гидратация пререндера)
-  entry-server.tsx         серверный рендер для пререндера
+public/brand/            логотип и символ из макета
+public/img/              скриншот интерфейса системы
+scripts/prerender.mjs    пререндер страниц, 404.html, sitemap.xml
+src/content/             ВСЕ тексты сайта: site.ts, home.ts, product.ts, training.ts, about.ts, seo.ts
+src/components/          общие компоненты
+src/pages/               страницы и их стили
+src/styles/global.css    токены дизайн-системы
 ```
 
-## Как добавить оригинальные материалы
+## Заявки
 
-- **Тексты** — в `src/content/*.ts`. После заполнения удалите соответствующие элементы
-  из массивов `*_PENDING` — жёлтые блоки исчезнут.
-- **Изображения внутреннего обучения** — положите файлы в `public/images/training/` и
-  добавьте в `INTERNAL_GALLERY` (`src/content/internalTraining.ts`):
-  `{ src: "/images/training/01.jpg", alt: "Описание", caption: "Подпись" }`. Галерея
-  с увеличением (клавиши ←/→/Esc, свайп) включится автоматически.
-- **Логотип и цвета** — `src/components/Logo.tsx`, `public/favicon.svg`, переменные `--c-*`.
+Кнопки «Оставить заявку», «Попробовать», «Связаться» открывают письмо на
+`Vladimir.slepov.cr@yandex.ru` с заполненной темой (`requestHref` в `src/content/site.ts`).
+Серверной формы нет: чтобы принимать заявки на сайте, нужен обработчик (почтовый сервис или API).
+«Войти» ведёт на существующую страницу `https://cloudrepairs.ru/Account/Login?ReturnUrl=/`.
 
-## Функции, требующие сервера
+## Размещение
 
-Форм обратной связи в подтверждённом содержании оригинала нет, поэтому отправка форм
-не реализована. Вход в систему ведёт на существующую страницу
-`https://cloudrepairs.ru/Account/Login?ReturnUrl=/`. Контакты — ссылки `mailto:`, `tel:` и Telegram.
+`npm run build` создаёт статическую папку `dist/`.
 
-## Размещение на хостинге
-
-`npm run build` создаёт полностью статическую папку `dist/`:
-
-```
-dist/index.html
-dist/obuchen/index.html
-dist/about/index.html
-dist/vnutyankaya-training/index.html
-dist/404.html, sitemap.xml, robots.txt, assets/
-```
-
-- **Nginx / Apache / любой shared-хостинг** — загрузите содержимое `dist/` в корень сайта.
-  URL со слешем на конце работают без rewrite-правил. Для 404 в Nginx: `error_page 404 /404.html;`
-- **Netlify / Vercel / Cloudflare Pages** — команда сборки `npm run build`, папка `dist`.
-- Сайт стоит на том же домене, что и система (`/Account/Login`) — при размещении убедитесь,
-  что маршруты приложения CloudRepairs не перекрываются статикой.
+- Nginx / Apache / shared-хостинг — загрузите содержимое `dist/` в корень сайта
+  (для Nginx: `error_page 404 /404.html;`).
+- Netlify / Vercel / Cloudflare Pages — команда `npm run build`, папка `dist`.
+- Сайт делит домен с системой (`/Account/Login`): маршруты приложения не должны перекрываться статикой.

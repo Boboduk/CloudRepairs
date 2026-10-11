@@ -1,50 +1,36 @@
+/* Общие стили внутренних страниц */
 .split {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-  gap: clamp(28px, 5vw, 80px);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: clamp(28px, 5vw, 88px);
   align-items: start;
 }
 .kicker {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--c-accent);
   margin-bottom: 14px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--c-lime-deep);
 }
 .splitTitle {
   font-size: var(--fs-h2);
-  max-width: 14ch;
+  color: var(--c-navy);
 }
 .splitBody {
   display: grid;
   gap: 28px;
 }
-.tags {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-.tags li {
-  padding: 20px 22px;
-  border-radius: var(--radius-m);
-  background: #fff;
-  border: 1px solid var(--c-line);
-  font-size: 1.125rem;
-  font-weight: 600;
+.splitLead {
+  font-size: var(--fs-lead);
+  color: var(--c-ink);
 }
 .row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 20px;
+  gap: 10px;
 }
 .steps {
   list-style: none;
-  margin: 0;
   padding: 0;
   border-top: 1px solid var(--c-line);
 }
@@ -54,30 +40,168 @@
   align-items: flex-start;
   padding: 20px 0;
   border-bottom: 1px solid var(--c-line);
-  font-size: var(--fs-lead);
+  font-size: 1.0625rem;
   font-weight: 500;
-  line-height: 1.45;
+  line-height: 1.5;
+  color: var(--c-navy);
 }
 .stepIcon {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 10px;
-  background: var(--c-primary-soft);
-  color: var(--c-primary);
+  background: var(--c-lime);
+  color: var(--c-navy);
+}
+
+/* Карточки-якоря в первом экране «Обучения» */
+.heroCards {
+  list-style: none;
+  padding: 0;
+  margin-top: clamp(40px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.heroCard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: "icon num" "icon title";
+  column-gap: 16px;
+  align-items: center;
+  padding: 20px 22px;
+  border-radius: var(--radius-m);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  text-decoration: none;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.heroCard:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--c-lime);
+}
+.heroCardIcon {
+  grid-area: icon;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: var(--c-lime);
+  color: var(--c-navy);
+}
+.heroCardNum {
+  grid-area: num;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+.heroCardTitle {
+  grid-area: title;
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+/* «О нас» */
+.principles {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.principle {
+  padding: 28px;
+  border-radius: var(--radius-l);
+  background: var(--c-cream);
+}
+.principleIcon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 28px;
+  border-radius: 16px;
+  background: var(--c-navy);
+  color: var(--c-lime);
+}
+.principle h3 {
+  font-size: var(--fs-h3);
+  color: var(--c-navy);
+}
+.principle p {
+  margin-top: 10px;
+  font-size: 0.9375rem;
+  color: var(--c-ink-soft);
+}
+.quote {
+  margin-top: clamp(40px, 5vw, 72px);
+  max-width: 46ch;
+  padding-left: 24px;
+  border-left: 4px solid var(--c-lime);
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 0.95rem + 0.8vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--c-navy);
+}
+.logoGroups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.groupLabel {
+  margin-bottom: 14px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-lime-deep);
+}
+.nameList {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.nameList li {
+  padding: 22px 26px;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--c-line);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--c-navy);
+}
+.more {
+  margin-top: 28px;
+}
+.more a {
+  font-weight: 600;
+  color: var(--c-navy);
+}
+.more a:hover {
+  color: var(--c-lime-deep);
+}
+
+@media (max-width: 1100px) {
+  .principles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 860px) {
-  .split {
+  .split,
+  .logoGroups {
     grid-template-columns: 1fr;
   }
-  .splitTitle {
-    max-width: none;
+  .heroCards {
+    grid-template-columns: 1fr;
   }
 }
-@media (max-width: 480px) {
-  .tags {
+@media (max-width: 560px) {
+  .principles {
     grid-template-columns: 1fr;
   }
 }

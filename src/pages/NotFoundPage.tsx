@@ -7,7 +7,21 @@ export default function NotFoundPage() {
   return (
     <>
       <Seo page={NOT_FOUND_SEO} />
-      <PageHero title="Страница не найдена" lead="Проверьте адрес или перейдите на главную страницу." actions={<Button to="/">На главную</Button>} />
+      <PageHero
+        eyebrow="Ошибка 404"
+        title="Страница не найдена"
+        lead="Проверьте адрес или перейдите на главную страницу."
+        actions={
+          <>
+            <Button to="/" size="lg">
+              На главную
+            </Button>
+            <Button to="/vnutyankaya-training/" variant="outlineLight" size="lg">
+              О продукте
+            </Button>
+          </>
+        }
+      />
     </>
   );
 }

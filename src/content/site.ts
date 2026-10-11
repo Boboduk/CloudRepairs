@@ -1,31 +1,34 @@
 /**
  * Общие данные сайта CloudRepairs.
- *
- * ВАЖНО: всё содержимое сайта хранится в папке src/content и взято только
- * из проверенных источников (см. AUDIT.md). Там, где оригинальный текст
- * получить не удалось, стоят блоки `pending` — их нужно заполнить
- * материалами с https://cloudrepairs.ru, ничего не придумывая.
+ * Содержимое взято из макета Figma «CloudRepairs» и с cloudrepairs.ru (см. AUDIT.md).
  */
 
 export const SITE_URL = "https://cloudrepairs.ru";
 export const SITE_NAME = "CloudRepairs";
 
-/** Вход в систему (ссылка с оригинального сайта) */
+/** Вход в систему (существующая страница на cloudrepairs.ru) */
 export const LOGIN_URL = "https://cloudrepairs.ru/Account/Login?ReturnUrl=/";
+
+export const EMAIL = "Vladimir.slepov.cr@yandex.ru";
+
+/** Ссылка «Оставить заявку»: без сервера формы — письмо с заполненной темой */
+export function requestHref(subject = "Заявка с сайта CloudRepairs") {
+  return `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
+}
 
 export interface NavItem {
   label: string;
   to: string;
-  external?: boolean;
 }
 
-/** Основная навигация. Пункты оригинального меню не удалось проверить —
- *  здесь перечислены известные страницы сайта. Сверьте с оригиналом. */
+/** Навигация (пункты из макета; «Новости» скрыты — в макете нет реальных материалов) */
 export const NAV: NavItem[] = [
-  { label: "Главная", to: "/" },
+  { label: "Продукт", to: "/vnutyankaya-training/" },
   { label: "Обучение", to: "/obuchen/" },
+  { label: "Кейсы", to: "/#cases" },
   { label: "О нас", to: "/about/" },
-  { label: "Внутреннее обучение", to: "/vnutyankaya-training/" },
+  { label: "Партнеры", to: "/#partners" },
+  { label: "Контакты", to: "#contacts" },
 ];
 
 export interface Contact {
@@ -36,14 +39,10 @@ export interface Contact {
   note?: string;
 }
 
-/** Контакты, опубликованные на cloudrepairs.ru (главная и страница входа) */
 export const CONTACTS: Contact[] = [
-  {
-    kind: "email",
-    label: "E-mail",
-    value: "vladimir.slepov.cr@yandex.ru",
-    href: "mailto:vladimir.slepov.cr@yandex.ru",
-  },
+  { kind: "email", label: "Почта", value: EMAIL, href: `mailto:${EMAIL}` },
+  { kind: "telegram", label: "Телеграм", value: "@VVS_cr", href: "https://t.me/VVS_cr" },
+  { kind: "telegram", label: "Телеграм", value: "@cloudrepairs", href: "https://t.me/cloudrepairs" },
   {
     kind: "phone",
     label: "Телефон",
@@ -51,6 +50,6 @@ export const CONTACTS: Contact[] = [
     href: "tel:+79292200245",
     note: "по вопросам приобретения сервиса",
   },
-  { kind: "telegram", label: "Telegram", value: "@cloudrepairs", href: "https://t.me/cloudrepairs" },
-  { kind: "telegram", label: "Telegram", value: "@VVS_cr", href: "https://t.me/VVS_cr" },
 ];
+
+export const TELEGRAM_URL = "https://t.me/cloudrepairs";

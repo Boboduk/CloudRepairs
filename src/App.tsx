@@ -3,7 +3,7 @@ import { Layout } from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import TrainingPage from "./pages/TrainingPage";
 import AboutPage from "./pages/AboutPage";
-import InternalTrainingPage from "./pages/InternalTrainingPage";
+import ProductPage from "./pages/ProductPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 export const ROUTER_FUTURE = { v7_startTransition: true, v7_relativeSplatPath: true } as const;
@@ -16,7 +16,7 @@ export function App() {
         <Route index element={<HomePage />} />
         <Route path="obuchen" element={<TrainingPage />} />
         <Route path="about" element={<AboutPage />} />
-        <Route path="vnutyankaya-training" element={<InternalTrainingPage />} />
+        <Route path="vnutyankaya-training" element={<ProductPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

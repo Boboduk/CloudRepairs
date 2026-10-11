@@ -1,21 +1,18 @@
-/** Блок, оригинальное содержание которого не удалось получить */
-export interface PendingContent {
-  /** Что должно быть на этом месте */
-  what: string;
-  /** Где взять оригинал */
-  source: string;
-}
+import type { IconName } from "../components/Icon";
 
 export interface Feature {
   title: string;
-  /** Оригинальный текст. Если не получен — undefined, и карточка показывает отметку */
-  text?: string;
-  list?: string[];
-  icon: "catalog" | "planning" | "auto" | "cabinet" | "notify" | "staff" | "techcard" | "gantt";
+  text: string;
+  icon: IconName;
 }
 
 export interface PageSeo {
   path: string;
   title: string;
   description: string;
+}
+
+export interface TitledList {
+  title: string;
+  items: string[];
 }

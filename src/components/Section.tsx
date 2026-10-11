@@ -6,23 +6,25 @@ interface Props {
   eyebrow?: string;
   title?: ReactNode;
   lead?: ReactNode;
-  tone?: "default" | "soft" | "deep";
-  children?: ReactNode;
-  headingLevel?: 2 | 3;
+  tone?: "default" | "cream" | "navy";
+  align?: "left" | "center";
   aside?: ReactNode;
+  children?: ReactNode;
+  className?: string;
 }
 
 /** Информационная секция с единым ритмом отступов и заголовков */
-export function Section({ id, eyebrow, title, lead, tone = "default", children, aside }: Props) {
+export function Section({ id, eyebrow, title, lead, tone = "default", align = "left", aside, children, className = "" }: Props) {
+  const titleId = id && title ? `${id}-title` : undefined;
   return (
-    <section id={id} className={`${styles.section} ${styles[tone]}`} aria-labelledby={id && title ? `${id}-title` : undefined}>
+    <section id={id} className={`${styles.section} ${styles[tone]} ${className}`} aria-labelledby={titleId}>
       <div className="container">
         {(eyebrow || title || lead) && (
-          <div className={styles.head}>
+          <div className={`${styles.head} ${align === "center" ? styles.center : ""} reveal`}>
             <div>
               {eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}
               {title && (
-                <h2 id={id ? `${id}-title` : undefined} className={styles.title}>
+                <h2 id={titleId} className={styles.title}>
                   {title}
                 </h2>
               )}

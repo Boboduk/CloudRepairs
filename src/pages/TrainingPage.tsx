@@ -3,11 +3,13 @@ import { PageHero } from "../components/PageHero";
 import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
 import { Section } from "../components/Section";
-import { Pending } from "../components/Pending";
-import { ContactsBlock } from "../components/ContactsBlock";
+import { CtaBand } from "../components/CtaBand";
 import { SEO } from "../content/seo";
-import { TRAINING_HERO, TRAINING_PENDING, TRAINING_SECTIONS } from "../content/training";
+import { TELEGRAM_URL, requestHref } from "../content/site";
+import { TRAINING_DIRECTIONS, TRAINING_HERO } from "../content/training";
 import styles from "./pages.module.css";
+
+const ICONS = ["users", "route", "shield"] as const;
 
 export default function TrainingPage() {
   return (
@@ -15,51 +17,67 @@ export default function TrainingPage() {
       <Seo page={SEO["/obuchen/"]} />
       <PageHero
         breadcrumb="Обучение"
+        eyebrow={TRAINING_HERO.eyebrow}
         title={TRAINING_HERO.title}
         lead={TRAINING_HERO.lead}
         actions={
           <>
-            {TRAINING_SECTIONS.map((s) => (
-              <Button key={s.id} to={`#${s.id}`} variant="secondary">
-                {s.title}
-              </Button>
-            ))}
-            <Button to="#contacts">Связаться</Button>
+            <Button to={requestHref("Обучение и консультация — заявка")} size="lg" icon={<Icon name="arrow" size={20} />}>
+              Оставить заявку
+            </Button>
+            <Button to={TELEGRAM_URL} variant="outlineLight" size="lg" icon={<Icon name="telegram" size={20} />}>
+              Написать в Телеграм
+            </Button>
           </>
         }
-      />
+      >
+        <ul className={styles.heroCards}>
+          {TRAINING_DIRECTIONS.map((d, i) => (
+            <li key={d.id}>
+              <a href={`#${d.id}`} className={styles.heroCard}>
+                <span className={styles.heroCardIcon}>
+                  <Icon name={ICONS[i]} size={24} />
+                </span>
+                <span className={styles.heroCardNum}>0{i + 1}</span>
+                <span className={styles.heroCardTitle}>{d.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </PageHero>
 
-      {TRAINING_SECTIONS.map((s, i) => (
-        <Section key={s.id} id={s.id} tone={i % 2 ? "soft" : "default"}>
-          <div className={styles.split}>
+      {TRAINING_DIRECTIONS.map((d, i) => (
+        <Section key={d.id} id={d.id} tone={i % 2 ? "cream" : "default"}>
+          <div className={`${styles.split} reveal`}>
             <div>
-              <p className={styles.kicker}>{String(i + 1).padStart(2, "0")}</p>
-              <h2 id={`${s.id}-title`} className={styles.splitTitle}>
-                {s.title}
+              <p className={styles.kicker}>0{i + 1}</p>
+              <h2 id={`${d.id}-title`} className={styles.splitTitle}>
+                {d.title}
               </h2>
             </div>
             <div className={styles.splitBody}>
-              <ol className={styles.steps}>
-                {s.items.map((item) => (
+              <p className={styles.splitLead}>{d.lead}</p>
+              <ul className={styles.steps}>
+                {d.items.map((item) => (
                   <li key={item}>
                     <span className={styles.stepIcon}>
-                      <Icon name="check" size={18} />
+                      <Icon name="check" size={18} strokeWidth={2.4} />
                     </span>
                     <span>{item}</span>
                   </li>
                 ))}
-              </ol>
-              {s.pending && <Pending items={[s.pending]} compact />}
+              </ul>
+              <div>
+                <Button to={requestHref(`${d.title} — заявка`)} variant="navy" icon={<Icon name="arrow" size={18} />}>
+                  Оставить заявку
+                </Button>
+              </div>
             </div>
           </div>
         </Section>
       ))}
 
-      <Section id="materials">
-        <Pending items={TRAINING_PENDING} />
-      </Section>
-
-      <ContactsBlock />
+      <CtaBand subject="Вопрос об обучении" />
     </>
   );
 }

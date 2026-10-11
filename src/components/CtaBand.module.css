@@ -1,0 +1,43 @@
+.wrap {
+  padding-block: clamp(40px, 5vw, 72px);
+}
+.band {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 40px;
+  padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 56px);
+  border-radius: var(--radius-xl);
+  background: var(--c-lime);
+  color: var(--c-navy);
+}
+.deco {
+  position: absolute;
+  right: -30px;
+  bottom: -46px;
+  width: 260px;
+  color: rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+}
+.text {
+  position: relative;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 1rem + 1.4vw, 2.125rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.actions {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+@media (max-width: 480px) {
+  .actions {
+    width: 100%;
+  }
+}

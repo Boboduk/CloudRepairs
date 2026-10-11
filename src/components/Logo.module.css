@@ -1,32 +1,14 @@
 .logo {
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--c-ink);
   flex-shrink: 0;
+  border-radius: 8px;
 }
-.mark {
-  width: 34px;
-  height: 34px;
+.logo img {
+  width: 172px;
+  height: auto;
 }
-.markBg {
-  fill: var(--c-ink);
-}
-.onDark .markBg {
-  fill: #1b2c45;
-}
-.word {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-.wordAccent {
-  color: var(--c-primary);
-}
-.onDark {
-  color: #fff;
-}
-.onDark .wordAccent {
-  color: #7aa7ff;
+@media (max-width: 400px) {
+  .logo img {
+    width: 150px;
+  }
 }

@@ -4,58 +4,80 @@
   justify-content: center;
   gap: 10px;
   border-radius: 999px;
+  border: 1.5px solid transparent;
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
-  border: 1px solid transparent;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.btn:hover .icon {
+  transform: translateX(3px);
 }
 .btn:active {
   transform: translateY(1px);
 }
+.icon {
+  display: inline-flex;
+  transition: transform 0.2s var(--ease);
+}
 .md {
-  min-height: 44px;
-  padding: 0 20px;
+  min-height: 48px;
+  padding: 0 22px;
   font-size: 0.9375rem;
 }
 .lg {
-  min-height: 54px;
-  padding: 0 28px;
-  font-size: 1rem;
+  min-height: 60px;
+  padding: 0 30px;
+  font-size: 1.0625rem;
 }
-.primary {
-  background: var(--c-primary);
+.lime {
+  background: var(--c-lime);
+  color: var(--c-navy);
+  box-shadow: 0 10px 30px -12px rgba(163, 210, 12, 0.8);
+}
+.lime:hover {
+  background: var(--c-lime-hover);
+}
+.navy {
+  background: var(--c-navy);
   color: #fff;
 }
-.primary:hover {
-  background: var(--c-primary-hover);
-}
-.secondary {
-  background: #fff;
-  color: var(--c-ink);
-  border-color: var(--c-line-strong);
-}
-.secondary:hover {
-  border-color: var(--c-ink);
-}
-.ghost {
-  background: transparent;
-  color: var(--c-primary);
-  padding-inline: 4px;
-  min-height: 40px;
-}
-.ghost:hover {
-  color: var(--c-primary-hover);
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.navy:hover {
+  background: var(--c-navy-2);
 }
 .light {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.24);
+  background: #fff;
+  color: var(--c-navy);
 }
 .light:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--c-cream);
+}
+.outlineLight {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+.outlineLight:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fff;
+}
+.outline {
+  background: transparent;
+  color: var(--c-navy);
+  border-color: var(--c-line-strong);
+}
+.outline:hover {
+  border-color: var(--c-navy);
+}
+.link {
+  min-height: 40px;
+  padding: 0;
+  background: none;
+  color: var(--c-navy);
+  border-radius: 6px;
+}
+.link:hover {
+  color: var(--c-lime-deep);
 }
 @media (max-width: 480px) {
   .lg {

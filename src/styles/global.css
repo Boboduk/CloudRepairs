@@ -1,49 +1,47 @@
 /*
  * Дизайн-система CloudRepairs.
- * Палитра временная: оригинальный логотип и фирменные цвета получить не удалось.
- * Чтобы перейти на фирменные цвета, достаточно поменять переменные --c-*.
+ * Цвета — из макета Figma: Accent Color 3 #082765, Black #194768, Accent #A3D20C, фон #FBF8EF;
+ * голубой — из логотипа.
  */
 :root {
-  /* Цвета */
-  --c-ink: #0e1b2e;
-  --c-ink-2: #2a3a52;
-  --c-muted: #5b6b82;
-  --c-faint: #8a98ad;
-  --c-line: #e3e8ef;
-  --c-line-strong: #cfd7e3;
+  --c-navy: #082765;
+  --c-navy-2: #0c3380;
+  --c-navy-deep: #051a45;
+  --c-ink: #194768;
+  --c-ink-soft: #4a6a85;
+  --c-faint: #8aa0b4;
+  --c-line: #e6e9ee;
+  --c-line-strong: #d3dae3;
   --c-bg: #ffffff;
-  --c-bg-soft: #f4f7fb;
-  --c-bg-deep: #0e1b2e;
-  --c-primary: #2563eb;
-  --c-primary-hover: #1d4ed8;
-  --c-primary-soft: #e8efff;
-  --c-accent: #f97316;
-  --c-accent-soft: #fff1e6;
-  --c-warning-bg: #fffaeb;
-  --c-warning-line: #f5d38a;
-  --c-warning-text: #8a5a00;
+  --c-cream: #fbf8ef;
+  --c-cream-2: #f4efe1;
+  --c-lime: #a3d20c;
+  --c-lime-hover: #b4e21c;
+  --c-lime-deep: #6f9200;
+  --c-sky: #29abe2;
+  --c-sky-soft: #e6f5fc;
 
-  /* Типографика */
   --font: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --fs-display: clamp(2.25rem, 1.4rem + 3.6vw, 4rem);
-  --fs-h1: clamp(2rem, 1.4rem + 2.6vw, 3.25rem);
-  --fs-h2: clamp(1.625rem, 1.25rem + 1.6vw, 2.5rem);
-  --fs-h3: clamp(1.125rem, 1.05rem + 0.35vw, 1.3rem);
+  --font-display: "Unbounded", "Onest", system-ui, sans-serif;
+  --fs-hero: clamp(2.75rem, 1.2rem + 6.4vw, 6.5rem);
+  --fs-h1: clamp(2rem, 1.3rem + 2.8vw, 3.5rem);
+  --fs-h2: clamp(1.625rem, 1.15rem + 1.9vw, 2.75rem);
+  --fs-h3: clamp(1.125rem, 1.04rem + 0.35vw, 1.375rem);
   --fs-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
   --fs-body: 1rem;
   --fs-small: 0.875rem;
 
-  /* Сетка и отступы */
-  --container: 1200px;
+  --container: 1240px;
   --gutter: clamp(16px, 4vw, 40px);
-  --section-y: clamp(64px, 6vw + 32px, 120px);
-  --radius-s: 10px;
-  --radius-m: 16px;
-  --radius-l: 24px;
-  --header-h: 72px;
+  --section-y: clamp(72px, 7vw + 24px, 136px);
+  --radius-s: 12px;
+  --radius-m: 20px;
+  --radius-l: 28px;
+  --radius-xl: 36px;
+  --header-h: 76px;
 
-  --shadow-s: 0 1px 2px rgba(14, 27, 46, 0.06);
-  --shadow-m: 0 1px 2px rgba(14, 27, 46, 0.04), 0 12px 32px -12px rgba(14, 27, 46, 0.16);
+  --shadow-m: 0 1px 2px rgba(8, 39, 101, 0.05), 0 18px 40px -18px rgba(8, 39, 101, 0.22);
+  --shadow-l: 0 40px 80px -30px rgba(5, 26, 69, 0.55);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
@@ -56,7 +54,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-top: calc(var(--header-h) + 72px);
 }
 
 body {
@@ -76,17 +74,29 @@ h2,
 h3,
 h4 {
   margin: 0;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  line-height: 1.12;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-wrap: balance;
   overflow-wrap: break-word;
   hyphens: auto;
 }
 
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
 p {
   margin: 0;
   text-wrap: pretty;
+}
+
+ul,
+ol {
+  margin: 0;
 }
 
 a {
@@ -95,17 +105,24 @@ a {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 
 button {
   font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--c-lime);
+  color: var(--c-navy);
 }
 
 :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--c-primary) 55%, transparent);
-  outline-offset: 2px;
-  border-radius: 6px;
+  outline: 3px solid var(--c-sky);
+  outline-offset: 3px;
+  border-radius: 8px;
 }
 
 .container {
@@ -128,9 +145,9 @@ button {
   position: absolute;
   left: 12px;
   top: -60px;
-  z-index: 100;
+  z-index: 200;
   padding: 10px 16px;
-  background: var(--c-ink);
+  background: var(--c-navy);
   color: #fff;
   border-radius: var(--radius-s);
   text-decoration: none;
@@ -138,6 +155,17 @@ button {
 }
 .skip-link:focus {
   top: 12px;
+}
+
+/* Плавное появление при прокрутке */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -149,5 +177,10 @@ button {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
