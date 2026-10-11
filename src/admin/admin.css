@@ -205,6 +205,11 @@ h3 {
 .a-card + .a-card {
   margin-top: 16px;
 }
+.a-stats > .a-card,
+.a-grid-2 > .a-card,
+.a-edit-side > .a-card {
+  margin-top: 0;
+}
 .a-card-title {
   margin-bottom: 14px;
   font-size: 16px;
@@ -1104,6 +1109,7 @@ h3 {
 @media (max-width: 1024px) {
   .a-shell {
     grid-template-columns: minmax(0, 1fr);
+    align-content: start;
   }
   .a-sidebar {
     position: fixed;
@@ -1115,7 +1121,12 @@ h3 {
   }
   .a-shell.menu-open .a-sidebar {
     transform: none;
-    box-shadow: 0 0 0 100vmax rgba(8, 20, 45, 0.45);
+  }
+  .a-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    background: rgba(8, 20, 45, 0.45);
   }
   .a-topbar {
     position: sticky;

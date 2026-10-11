@@ -180,7 +180,10 @@ async function main() {
   });
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-    if (err instanceof HttpError && err.status === 404) return res.status(404).type("text/plain").send("Not found");
+    // 404 от express.static (нет файла) и от маршрутов
+    const status = err instanceof HttpError ? err.status : (err as { status?: number; statusCode?: number })?.status;
+    if (status === 404) return res.status(404).type("text/plain").send("Not found");
+    if (status === 400 || status === 403) return res.status(status).type("text/plain").send("Bad request");
     console.error("[server]", err);
     res.status(500).type("text/plain").send("Внутренняя ошибка сервера");
   });
