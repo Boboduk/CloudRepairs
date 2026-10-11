@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-50 text-ink-900 antialiased;
+  font-feature-settings: "tnum" 0, "ss01" 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-white shadow-soft ring-1 ring-ink-100/80;
+  }
+  .label {
+    @apply mb-2 block text-[13px] font-semibold uppercase tracking-wide text-ink-400;
+  }
+  .input {
+    @apply h-12 w-full rounded-2xl border border-ink-200 bg-white px-4 text-[15px] font-medium text-ink-900 outline-none transition placeholder:font-normal placeholder:text-ink-300 focus:border-aqua-500 focus:ring-4 focus:ring-aqua-500/15;
+  }
+  .chip {
+    @apply inline-flex h-11 items-center justify-center gap-1.5 rounded-2xl border border-ink-200 bg-white px-4 text-[15px] font-semibold text-ink-700 transition hover:border-ink-300 active:scale-[.98];
+  }
+  .chip-active {
+    @apply border-aqua-500 bg-aqua-50 text-aqua-700 ring-2 ring-aqua-500/20;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- Leaflet: фирменные маркеры ---------- */
+.leaflet-container {
+  font-family: inherit;
+  background: #e8eef6;
+}
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+}
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 8px 24px -6px rgba(13, 23, 43, 0.18) !important;
+  border-radius: 14px !important;
+  overflow: hidden;
+}
+.leaflet-control-zoom a {
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  color: #1a2740 !important;
+}
+.vv-marker {
+  background: transparent !important;
+  border: none !important;
+}
+.vv-truck {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  color: #fff;
+  box-shadow: 0 6px 16px -4px rgba(13, 23, 43, 0.45);
+  border: 2.5px solid #fff;
+  transition: transform 0.2s;
+}
+.vv-truck.is-offline {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+.vv-truck.is-active::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 18px;
+  border: 2px solid currentColor;
+  color: #0a88f0;
+  animation: ripple 2.2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+.vv-truck-label {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  background: #0d172b;
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 8px;
+}
+.vv-pin {
+  position: relative;
+  width: 44px;
+  height: 52px;
+}
+.vv-pin-head {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50% 50% 50% 4px;
+  rotate: -45deg;
+  background: #0d172b;
+  border: 3px solid #fff;
+  box-shadow: 0 8px 18px -6px rgba(13, 23, 43, 0.6);
+}
+.vv-pin-head > * {
+  rotate: 45deg;
+}
+.vv-order-dot {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2.5px solid #0a88f0;
+  color: #0a88f0;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 6px 14px -4px rgba(10, 136, 240, 0.6);
+}
+.vv-pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 999px;
+  background: rgba(10, 136, 240, 0.18);
+  animation: ripple 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
