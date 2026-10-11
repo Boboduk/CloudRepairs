@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Сайт CloudRepairs с CMS: публичная часть (React SSR), админ-панель /admin, сервер Express + SQLite",
   "scripts": {
-    "dev": "tsx watch --clear-screen=false server/index.ts",
+    "dev": "tsx watch --clear-screen=false --exclude \"**/*.timestamp-*.mjs\" server/index.ts",
     "build": "npm run typecheck && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && npm run build:server",
     "build:server": "esbuild server/index.ts server/cli/create-admin.ts server/cli/backup.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/server --outbase=server && node -e \"require('fs').cpSync('server/db/migrations','dist/server/db/migrations',{recursive:true})\"",
     "start": "NODE_ENV=production node dist/server/index.js",
