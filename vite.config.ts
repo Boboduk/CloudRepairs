@@ -1,4 +1,4 @@
-import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -11,8 +11,8 @@ export default defineConfig({
     rollupOptions: {
       // два приложения: публичный сайт (SSR + гидратация) и админ-панель /admin
       input: {
-        index: resolve(__dirname, "index.html"),
-        admin: resolve(__dirname, "admin.html"),
+        index: fileURLToPath(new URL("./index.html", import.meta.url)),
+        admin: fileURLToPath(new URL("./admin.html", import.meta.url)),
       },
     },
   },

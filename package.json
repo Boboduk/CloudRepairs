@@ -7,13 +7,13 @@
   "scripts": {
     "dev": "tsx watch --clear-screen=false --exclude \"**/*.timestamp-*.mjs\" server/index.ts",
     "build": "npm run typecheck && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && npm run build:server",
-    "build:server": "esbuild server/index.ts server/cli/create-admin.ts server/cli/backup.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/server --outbase=server && node -e \"require('fs').cpSync('server/db/migrations','dist/server/db/migrations',{recursive:true})\"",
-    "start": "NODE_ENV=production node dist/server/index.js",
+    "build:server": "esbuild server/index.ts server/cli/create-admin.ts server/cli/backup.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/server --outbase=server \"--banner:js=process.env.NODE_ENV ||= 'production';\" && node -e \"require('fs').cpSync('server/db/migrations','dist/server/db/migrations',{recursive:true})\"",
+    "start": "node dist/server/index.js",
     "typecheck": "tsc -p tsconfig.json",
     "admin:create": "tsx server/cli/create-admin.ts",
-    "admin:create:prod": "NODE_ENV=production node dist/server/cli/create-admin.js",
+    "admin:create:prod": "node dist/server/cli/create-admin.js",
     "backup": "tsx server/cli/backup.ts",
-    "backup:prod": "NODE_ENV=production node dist/server/cli/backup.js",
+    "backup:prod": "node dist/server/cli/backup.js",
     "test": "node --test --import tsx tests/*.test.ts"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import express, { type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
 import { config } from "./config";
@@ -108,7 +109,11 @@ async function main() {
 
   if (!config.isProd) {
     const { createServer } = await import("vite");
-    const vite = await createServer({ server: { middlewareMode: true }, appType: "custom" });
+    // настройки передаются напрямую: Vite не создаёт временный vite.config.ts.timestamp-*.mjs,
+    // из-за которого tsx watch перезапускал сервер по кругу
+    const configUrl = pathToFileURL(path.join(config.root, "vite.config.ts")).href;
+    const { default: viteConfig } = (await import(/* @vite-ignore */ configUrl)) as { default: import("vite").InlineConfig };
+    const vite = await createServer({ ...viteConfig, configFile: false, server: { middlewareMode: true }, appType: "custom" });
     app.use(vite.middlewares);
     getTemplate = async (name, url) => vite.transformIndexHtml(url, fs.readFileSync(path.join(config.root, `${name}.html`), "utf8"));
     getRender = async () => (await vite.ssrLoadModule("/src/entry-server.tsx")).render as RenderFn;
@@ -188,8 +193,19 @@ async function main() {
     res.status(500).type("text/plain").send("Внутренняя ошибка сервера");
   });
 
-  const server = app.listen(config.port, config.host, () => {
+  const server = app.listen(config.port, config.host, (err?: Error) => {
+    if (err) return; // ошибка обрабатывается ниже, в server.on("error")
     console.log(`CloudRepairs: http://${config.host === "0.0.0.0" ? "localhost" : config.host}:${config.port} (${config.isProd ? "production" : "development"})`);
+  });
+  server.on("error", (e: NodeJS.ErrnoException) => {
+    if (e.code === "EADDRINUSE") {
+      console.error(`\nПорт ${config.port} уже занят — скорее всего, сервер уже запущен в другом окне терминала.\nЗакройте его (Ctrl+C) или запустите на другом порту:\n  macOS/Linux:  PORT=3001 npm run dev\n  Windows:      set PORT=3001&& npm run dev   (PowerShell: $env:PORT=3001; npm run dev)\n`);
+    } else if (e.code === "EACCES") {
+      console.error(`\nНет прав открыть порт ${config.port}. Укажите порт больше 1024: PORT=3000\n`);
+    } else {
+      console.error(e);
+    }
+    process.exit(1);
   });
   const shutdown = () => {
     server.close(() => {

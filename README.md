@@ -44,6 +44,18 @@ npm run dev                                                    # http://localhos
 её текущим содержимым сайта (тексты страниц, продукты, кейсы, партнёры, контакты).
 Папка `data/` в git не попадает.
 
+### Если не запускается
+
+| Что видно | Что делать |
+|---|---|
+| `Порт 3000 уже занят` | Сервер уже запущен в другом окне — закройте его (Ctrl+C) или задайте другой порт: `PORT=3001 npm run dev` (Windows cmd: `set PORT=3001&& npm run dev`, PowerShell: `$env:PORT=3001; npm run dev`) |
+| `Cannot find module 'express'` / `'better-sqlite3'` / `'sharp'` | После `git pull` не установлены новые зависимости — выполните `npm install` |
+| `NODE_MODULE_VERSION`, `was compiled against a different Node.js version`, `Could not locate the bindings file` | Модули собраны под другую версию Node.js — выполните `npm rebuild better-sqlite3 sharp` (или удалите `node_modules` и `npm install`) |
+| `npm install` падает на `better-sqlite3` с `gyp`/`node-gyp` | Для вашей версии Node.js нет готовой сборки — установите Node.js **22 LTS** (https://nodejs.org) и повторите `npm install` |
+| Сервер постоянно пишет `Restarting...` | Обновите проект (`git pull`): исправлено. Старые файлы `vite.config.ts.timestamp-*.mjs` в корне можно удалить |
+| `/admin` открывает форму входа, но пароль не подходит | Создайте администратора или смените пароль: `npm run admin:create -- --email … --reset` |
+| Вход в production по `http://` (не localhost) не сохраняется | Cookie в production только по HTTPS. Для проверки без HTTPS задайте `COOKIE_SECURE=false` |
+
 | Команда | Что делает |
 |---|---|
 | `npm run dev` | Сервер разработки с горячей перезагрузкой (сайт + админка + API) |
