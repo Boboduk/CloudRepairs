@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { LOGIN_URL, NAV, requestHref } from "../content/site";
+import { NAV } from "../content/site";
+import { useContacts, useSite } from "../data/SiteData";
 import { Logo } from "./Logo";
 import { Icon } from "./Icon";
 import styles from "./Header.module.css";
@@ -11,6 +12,10 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const site = useSite();
+  const { settings, requestHref } = useContacts();
+  // «Новости» в меню появляются, когда опубликована хотя бы одна новость
+  const nav = site.news.length ? [...NAV.slice(0, 4), { label: "Новости", to: "/news/" }, ...NAV.slice(4)] : NAV;
 
   useEffect(() => setOpen(false), [location.pathname, location.hash]);
 
@@ -40,7 +45,7 @@ export function Header() {
         <div className={`container ${styles.inner}`}>
           <Logo />
           <nav className={styles.nav} aria-label="Основная навигация">
-            {NAV.map((item) =>
+            {nav.map((item) =>
               isPage(item.to) ? (
                 <NavLink key={item.to} to={item.to} className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ""}`}>
                   {item.label}
@@ -53,11 +58,8 @@ export function Header() {
             )}
           </nav>
           <div className={styles.actions}>
-            <a className={styles.login} href={LOGIN_URL} target="_blank" rel="noopener noreferrer">
-              Войти
-            </a>
             <a className={styles.cta} href={requestHref()}>
-              Связаться
+              {settings.headerCta}
             </a>
           </div>
           <button
@@ -77,7 +79,7 @@ export function Header() {
       <div id="mobile-menu" className={styles.mobile} hidden={!open}>
         <nav className="container" aria-label="Мобильная навигация">
           <ul className={styles.mobileList}>
-            {NAV.map((item) => (
+            {nav.map((item) => (
               <li key={item.to}>
                 <Link to={item.to} className={styles.mobileLink} onClick={() => setOpen(false)}>
                   {item.label}
@@ -89,9 +91,6 @@ export function Header() {
           <div className={styles.mobileActions}>
             <a className={styles.mobileCta} href={requestHref()}>
               Оставить заявку
-            </a>
-            <a className={styles.mobileLogin} href={LOGIN_URL} target="_blank" rel="noopener noreferrer">
-              Войти в систему <Icon name="external" size={18} />
             </a>
           </div>
         </nav>

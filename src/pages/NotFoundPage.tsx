@@ -1,12 +1,13 @@
+import { useLocation } from "react-router-dom";
 import { Seo } from "../components/Seo";
 import { PageHero } from "../components/PageHero";
 import { Button } from "../components/Button";
-import { NOT_FOUND_SEO } from "../content/seo";
 
 export default function NotFoundPage() {
+  const { pathname } = useLocation();
   return (
     <>
-      <Seo page={NOT_FOUND_SEO} />
+      <Seo title="Страница не найдена — CloudRepairs" description="Запрошенная страница не найдена." path={pathname} noindex />
       <PageHero
         eyebrow="Ошибка 404"
         title="Страница не найдена"

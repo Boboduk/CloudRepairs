@@ -4,41 +4,47 @@ import { Button } from "../components/Button";
 import { Icon } from "../components/Icon";
 import { Section } from "../components/Section";
 import { CtaBand } from "../components/CtaBand";
-import { SEO } from "../content/seo";
-import { TELEGRAM_URL, requestHref } from "../content/site";
-import { TRAINING_DIRECTIONS, TRAINING_HERO } from "../content/training";
+import { Figure } from "../components/Figure";
+import { useContacts, usePage } from "../data/SiteData";
 import styles from "./pages.module.css";
 
-const ICONS = ["users", "route", "shield"] as const;
+const ICONS = ["users", "route", "shield", "spark", "layers", "factory", "monitor", "gantt"] as const;
 
 export default function TrainingPage() {
+  const page = usePage("training");
+  const { hero, directions } = page.sections;
+  const { requestHref, telegramUrl } = useContacts();
+  const anchor = (d: { id: string }, i: number) => d.id || `napravlenie-${i + 1}`;
+
   return (
     <>
-      <Seo page={SEO["/obuchen/"]} />
+      <Seo title={page.seoTitle} description={page.seoDescription} path="/obuchen/" />
       <PageHero
         breadcrumb="Обучение"
-        eyebrow={TRAINING_HERO.eyebrow}
-        title={TRAINING_HERO.title}
-        lead={TRAINING_HERO.lead}
+        eyebrow={hero.eyebrow}
+        title={hero.title}
+        lead={hero.lead}
         actions={
           <>
             <Button to={requestHref("Обучение и консультация — заявка")} size="lg" icon={<Icon name="arrow" size={20} />}>
-              Оставить заявку
+              {hero.requestLabel}
             </Button>
-            <Button to={TELEGRAM_URL} variant="outlineLight" size="lg" icon={<Icon name="telegram" size={20} />}>
-              Написать в Телеграм
-            </Button>
+            {telegramUrl && (
+              <Button to={telegramUrl} variant="outlineLight" size="lg" icon={<Icon name="telegram" size={20} />}>
+                {hero.telegramLabel}
+              </Button>
+            )}
           </>
         }
       >
         <ul className={styles.heroCards}>
-          {TRAINING_DIRECTIONS.map((d, i) => (
-            <li key={d.id}>
-              <a href={`#${d.id}`} className={styles.heroCard}>
+          {directions.items.map((d, i) => (
+            <li key={i}>
+              <a href={`#${anchor(d, i)}`} className={styles.heroCard}>
                 <span className={styles.heroCardIcon}>
-                  <Icon name={ICONS[i]} size={24} />
+                  <Icon name={ICONS[i % ICONS.length]} size={24} />
                 </span>
-                <span className={styles.heroCardNum}>0{i + 1}</span>
+                <span className={styles.heroCardNum}>{String(i + 1).padStart(2, "0")}</span>
                 <span className={styles.heroCardTitle}>{d.title}</span>
               </a>
             </li>
@@ -46,30 +52,33 @@ export default function TrainingPage() {
         </ul>
       </PageHero>
 
-      {TRAINING_DIRECTIONS.map((d, i) => (
-        <Section key={d.id} id={d.id} tone={i % 2 ? "cream" : "default"}>
+      {directions.items.map((d, i) => (
+        <Section key={i} id={anchor(d, i)} tone={i % 2 ? "cream" : "default"}>
           <div className={`${styles.split} reveal`}>
             <div>
-              <p className={styles.kicker}>0{i + 1}</p>
-              <h2 id={`${d.id}-title`} className={styles.splitTitle}>
+              <p className={styles.kicker}>{String(i + 1).padStart(2, "0")}</p>
+              <h2 id={`${anchor(d, i)}-title`} className={styles.splitTitle}>
                 {d.title}
               </h2>
+              {d.image && <Figure src={d.image} caption={d.imageCaption} alt={d.title} className={styles.sideFigure} />}
             </div>
             <div className={styles.splitBody}>
-              <p className={styles.splitLead}>{d.lead}</p>
-              <ul className={styles.steps}>
-                {d.items.map((item) => (
-                  <li key={item}>
-                    <span className={styles.stepIcon}>
-                      <Icon name="check" size={18} strokeWidth={2.4} />
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+              {d.lead && <p className={styles.splitLead}>{d.lead}</p>}
+              {d.items.length > 0 && (
+                <ul className={styles.steps}>
+                  {d.items.map((item, j) => (
+                    <li key={j}>
+                      <span className={styles.stepIcon}>
+                        <Icon name="check" size={18} strokeWidth={2.4} />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
               <div>
                 <Button to={requestHref(`${d.title} — заявка`)} variant="navy" icon={<Icon name="arrow" size={18} />}>
-                  Оставить заявку
+                  {hero.requestLabel}
                 </Button>
               </div>
             </div>

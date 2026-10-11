@@ -1,0 +1,77 @@
+.rich {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--c-ink);
+  overflow-wrap: break-word;
+}
+.rich > * + * {
+  margin-top: 1em;
+}
+.rich h2,
+.rich h3,
+.rich h4 {
+  margin-top: 1.8em;
+  color: var(--c-navy);
+  font-family: var(--font-display);
+  line-height: 1.25;
+}
+.rich h2 {
+  font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+}
+.rich h3 {
+  font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.4375rem);
+}
+.rich h4 {
+  font-size: 1.125rem;
+}
+.rich a {
+  color: var(--c-navy);
+  text-decoration-color: var(--c-lime);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.rich a:hover {
+  color: var(--c-lime-deep);
+}
+.rich ul,
+.rich ol {
+  padding-left: 1.4em;
+}
+.rich li + li {
+  margin-top: 0.4em;
+}
+.rich ul li::marker {
+  color: var(--c-lime-deep);
+}
+.rich blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 4px 0 4px 20px;
+  border-left: 4px solid var(--c-lime);
+  font-size: 1.125rem;
+  color: var(--c-navy);
+}
+.rich img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-m);
+}
+.rich hr {
+  border: 0;
+  border-top: 1px solid var(--c-line);
+  margin: 2em 0;
+}
+.rich code,
+.rich pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  background: var(--c-cream);
+  border-radius: 6px;
+}
+.rich code {
+  padding: 2px 6px;
+}
+.rich pre {
+  padding: 16px;
+  overflow-x: auto;
+}

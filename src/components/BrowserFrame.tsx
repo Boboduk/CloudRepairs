@@ -5,8 +5,8 @@ import styles from "./BrowserFrame.module.css";
 interface Props {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   url?: string;
   className?: string;
   priority?: boolean;

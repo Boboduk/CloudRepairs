@@ -60,16 +60,6 @@
   align-items: center;
   gap: 8px;
 }
-.login {
-  padding: 10px 14px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 999px;
-}
-.login:hover {
-  background: color-mix(in srgb, currentColor 9%, transparent);
-}
 .cta {
   display: inline-flex;
   align-items: center;
@@ -132,8 +122,7 @@
   display: grid;
   gap: 10px;
 }
-.mobileCta,
-.mobileLogin {
+.mobileCta {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -146,9 +135,6 @@
 .mobileCta {
   background: var(--c-lime);
   color: var(--c-navy);
-}
-.mobileLogin {
-  border: 1.5px solid rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 1080px) {

@@ -1,9 +1,12 @@
 import { useEffect } from "react";
 import { SITE_NAME, SITE_URL } from "../content/site";
-import type { PageSeo } from "../content/types";
 
-function setMeta(attr: "name" | "property", key: string, value: string) {
+function setMeta(attr: "name" | "property", key: string, value: string | null) {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
+  if (value === null) {
+    el?.remove();
+    return;
+  }
   if (!el) {
     el = document.createElement("meta");
     el.setAttribute(attr, key);
@@ -12,25 +15,30 @@ function setMeta(attr: "name" | "property", key: string, value: string) {
   el.content = value;
 }
 
-/** Обновляет title/description/OG при переходах по сайту.
- *  При сборке те же данные вшиваются в HTML каждой страницы (scripts/prerender.mjs). */
-export function Seo({ page }: { page: PageSeo }) {
+export interface SeoProps {
+  title: string;
+  description: string;
+  path: string;
+  noindex?: boolean;
+}
+
+/** Обновляет title/description/OG при переходах. При первом заходе их уже отдаёт сервер. */
+export function Seo({ title, description, path, noindex }: SeoProps) {
   useEffect(() => {
-    document.title = page.title;
-    setMeta("name", "description", page.description);
-    setMeta("property", "og:title", page.title);
-    setMeta("property", "og:description", page.description);
-    setMeta("property", "og:url", SITE_URL + page.path);
-    setMeta("property", "og:type", "website");
+    document.title = title;
+    setMeta("name", "description", description);
+    setMeta("property", "og:title", title);
+    setMeta("property", "og:description", description);
+    setMeta("property", "og:url", SITE_URL + path);
     setMeta("property", "og:site_name", SITE_NAME);
-    setMeta("property", "og:locale", "ru_RU");
+    setMeta("name", "robots", noindex ? "noindex" : null);
     let link = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!link) {
       link = document.createElement("link");
       link.rel = "canonical";
       document.head.appendChild(link);
     }
-    link.href = SITE_URL + page.path;
-  }, [page]);
+    link.href = SITE_URL + path;
+  }, [title, description, path, noindex]);
   return null;
 }

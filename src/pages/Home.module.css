@@ -274,6 +274,36 @@ a.product:hover .productArrow {
   color: rgba(255, 255, 255, 0.72);
 }
 
+a.product .productLink,
+.productLink {
+  margin-top: 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--c-lime-deep);
+}
+.productMain .productLink {
+  color: var(--c-lime);
+}
+.productImage {
+  margin-top: 20px;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius-m);
+}
+.productImage + .productTitle {
+  padding-top: 20px;
+}
+
+/* ---------- Новости ---------- */
+.newsGrid {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
 /* ---------- Модули ---------- */
 .modules {
   list-style: none;
@@ -471,6 +501,48 @@ a.product:hover .productArrow {
 .case:nth-child(3) {
   background: linear-gradient(150deg, #3d5f00 0%, var(--c-lime) 140%);
 }
+.caseLink {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 28px;
+  color: inherit;
+  text-decoration: none;
+}
+.caseLink:hover .caseName {
+  text-decoration: underline;
+  text-decoration-color: var(--c-lime);
+  text-underline-offset: 6px;
+}
+.caseCover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.caseWithCover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 26, 69, 0) 30%, rgba(5, 26, 69, 0.85) 100%);
+}
+.caseWithCover .caseMark {
+  display: none;
+}
+.caseText {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 8px;
+}
+.caseExcerpt {
+  max-width: 40ch;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+}
 .caseName {
   position: relative;
   font-family: var(--font-display);
@@ -520,6 +592,20 @@ a.product:hover .productArrow {
 .partner:hover {
   background: var(--c-cream);
 }
+.partnerLink {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.partnerLogo {
+  max-width: 100%;
+  max-height: 72px;
+  width: auto;
+  object-fit: contain;
+}
 
 /* ---------- Адаптив ---------- */
 @media (max-width: 1100px) {
@@ -553,7 +639,8 @@ a.product:hover .productArrow {
   .trainingTabs {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .cases {
+  .cases,
+  .newsGrid {
     grid-template-columns: 1fr;
   }
   .case {

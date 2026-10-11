@@ -1,72 +1,44 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Seo } from "../components/Seo";
 import { Button } from "../components/Button";
-import { Icon } from "../components/Icon";
+import { Icon, type IconName } from "../components/Icon";
 import { Section } from "../components/Section";
 import { BrowserFrame } from "../components/BrowserFrame";
 import { CtaBand } from "../components/CtaBand";
-import { SEO } from "../content/seo";
-import { requestHref } from "../content/site";
-import { CASES, HOME_HERO, HOME_STATS, MODULES, PARTNERS, PRODUCTS } from "../content/home";
-import { INDUSTRIES } from "../content/product";
-import { TRAINING_DIRECTIONS } from "../content/training";
+import { SmartLink } from "../components/SmartLink";
+import { NewsCard } from "../components/NewsCard";
+import { useContacts, usePage, useSite } from "../data/SiteData";
+import { detailPath } from "../../shared/routes";
 import styles from "./Home.module.css";
 
 export default function HomePage() {
-  return (
-    <>
-      <Seo page={SEO["/"]} />
-      <Hero />
+  const site = useSite();
+  const page = usePage("home");
+  const s = page.sections;
 
-      <Section id="products" tone="cream" eyebrow="Продукты и услуги" title="Всё для управления ТОиР — в одном месте">
-        <ul className={styles.products}>
-          {PRODUCTS.map((p) => {
-            const body = (
-              <>
-                <div className={styles.productTop}>
-                  <span className={styles.productNum}>{p.num}.</span>
-                  {p.to && (
-                    <span className={styles.productArrow}>
-                      <Icon name="arrowUpRight" size={22} />
-                    </span>
-                  )}
-                </div>
-                <h3 className={styles.productTitle}>{p.title}</h3>
-                <p className={styles.productText}>{p.text}</p>
-              </>
-            );
-            return (
-              <li key={p.num} className="reveal">
-                {p.to ? (
-                  <Link to={p.to} className={`${styles.product} ${p.num === "01" ? styles.productMain : ""}`}>
-                    {body}
-                  </Link>
-                ) : (
-                  <div className={styles.product}>{body}</div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </Section>
-
+  const blocks: Record<string, ReactNode> = {
+    products: <ProductsSection key="products" />,
+    modules: (
       <Section
+        key="modules"
         id="modules"
         tone="navy"
-        eyebrow="Облачные ремонты"
-        title="Возможности системы"
+        eyebrow={s.modules.eyebrow}
+        title={s.modules.title}
         aside={
-          <Button to="/vnutyankaya-training/#funkcii" variant="outlineLight" icon={<Icon name="arrow" size={18} />}>
-            Все функции
-          </Button>
+          s.modules.buttonLabel ? (
+            <Button to={s.modules.buttonHref || "/vnutyankaya-training/"} variant="outlineLight" icon={<Icon name="arrow" size={18} />}>
+              {s.modules.buttonLabel}
+            </Button>
+          ) : undefined
         }
       >
         <ol className={styles.modules}>
-          {MODULES.map((m, i) => (
-            <li key={m.title} className={`${styles.module} reveal`}>
+          {s.modules.items.map((m, i) => (
+            <li key={`${m.title}-${i}`} className={`${styles.module} reveal`}>
               <span className={styles.moduleIcon}>
-                <Icon name={m.icon} size={26} />
+                <Icon name={m.icon as IconName} size={26} />
               </span>
               <div>
                 <h3 className={styles.moduleTitle}>
@@ -79,10 +51,11 @@ export default function HomePage() {
           ))}
         </ol>
       </Section>
-
-      <Section id="industries" eyebrow="Область применения" title="Мульти-отраслевое решение">
+    ),
+    industries: (
+      <Section key="industries" id="industries" eyebrow={s.industries.eyebrow} title={s.industries.title}>
         <ul className={styles.industries}>
-          {INDUSTRIES.map((ind) => (
+          {site.pages.product.sections.application.industries.map((ind) => (
             <li key={ind.title} className="reveal">
               <Link to="/vnutyankaya-training/#primenenie" className={styles.industry}>
                 <span>{ind.title}</span>
@@ -92,39 +65,46 @@ export default function HomePage() {
           ))}
         </ul>
       </Section>
-
-      <TrainingTabs />
-
-      <Section id="cases" eyebrow="Кейсы" title="Нам доверяют">
-        <ul className={styles.cases}>
-          {CASES.map((c) => (
-            <li key={c} className={`${styles.case} reveal`}>
-              <span className={styles.caseName}>{c}</span>
-              <img src="/brand/symbol.png" alt="" aria-hidden="true" className={styles.caseMark} width={422} height={511} loading="lazy" />
-            </li>
-          ))}
-        </ul>
-
-        <div id="partners" className={styles.partnersHead}>
-          <h2 id="partners-title" className={styles.partnersTitle}>
-            Партнеры
-          </h2>
-        </div>
-        <ul className={styles.partners} aria-labelledby="partners-title">
-          {PARTNERS.map((p) => (
-            <li key={p} className={`${styles.partner} reveal`}>
-              {p}
+    ),
+    training: <TrainingTabs key="training" />,
+    news: site.news.length ? (
+      <Section
+        key="news"
+        id="news"
+        tone="cream"
+        eyebrow={s.news.eyebrow}
+        title={s.news.title}
+        aside={
+          <Button to="/news/" variant="outline" icon={<Icon name="arrow" size={18} />}>
+            {s.news.allLabel}
+          </Button>
+        }
+      >
+        <ul className={styles.newsGrid}>
+          {site.news.slice(0, 3).map((n) => (
+            <li key={n.id} className="reveal">
+              <NewsCard item={n} />
             </li>
           ))}
         </ul>
       </Section>
+    ) : null,
+    cases: <CasesSection key="cases" />,
+  };
 
+  return (
+    <>
+      <Seo title={page.seoTitle} description={page.seoDescription} path="/" />
+      <Hero />
+      {page.order.map((key) => blocks[key] ?? null)}
       <CtaBand />
     </>
   );
 }
 
 function Hero() {
+  const h = usePage("home").sections.hero;
+  const { requestHref } = useContacts();
   return (
     <section className={styles.hero}>
       <div className={styles.heroBg} aria-hidden="true">
@@ -136,85 +116,208 @@ function Hero() {
       </div>
       <div className={`container ${styles.heroInner}`}>
         <div className={styles.heroCopy}>
-          <p className={styles.heroEyebrow}>{HOME_HERO.eyebrow}</p>
+          {h.eyebrow && <p className={styles.heroEyebrow}>{h.eyebrow}</p>}
           <h1 className={styles.heroTitle}>
-            Cloud<span>Repairs</span>
+            {h.titleMain}
+            <span>{h.titleAccent}</span>
           </h1>
-          <p className={styles.heroTagline}>{HOME_HERO.tagline}</p>
-          <p className={styles.heroLead}>{HOME_HERO.lead}</p>
+          {h.tagline && <p className={styles.heroTagline}>{h.tagline}</p>}
+          {h.lead && <p className={styles.heroLead}>{h.lead}</p>}
           <div className={styles.heroActions}>
-            <Button to={requestHref("Попробовать CloudRepairs")} size="lg" icon={<Icon name="arrow" size={20} />}>
-              Попробовать
-            </Button>
-            <Button to="/vnutyankaya-training/" variant="outlineLight" size="lg">
-              О продукте
-            </Button>
+            {h.primaryLabel && (
+              <Button to={requestHref(`${h.primaryLabel} CloudRepairs`)} size="lg" icon={<Icon name="arrow" size={20} />}>
+                {h.primaryLabel}
+              </Button>
+            )}
+            {h.secondaryLabel && h.secondaryHref && (
+              <Button to={h.secondaryHref} variant="outlineLight" size="lg">
+                {h.secondaryLabel}
+              </Button>
+            )}
           </div>
         </div>
-        <div className={styles.heroVisual}>
-          <BrowserFrame src="/img/ui-equipment-catalog.png" alt="Интерфейс CloudRepairs: иерархический каталог оборудования" width={521} height={438} priority />
-          <div className={`${styles.chip} ${styles.chip1}`}>
-            <Icon name="shield" size={18} /> Реестр российского ПО
+        {h.image && (
+          <div className={styles.heroVisual}>
+            <BrowserFrame src={h.image} alt={h.imageAlt} priority />
+            {h.chips[0] && (
+              <div className={`${styles.chip} ${styles.chip1}`}>
+                <Icon name="shield" size={18} /> {h.chips[0]}
+              </div>
+            )}
+            {h.chips[1] && (
+              <div className={`${styles.chip} ${styles.chip2}`}>
+                <Icon name="devices" size={18} /> {h.chips[1]}
+              </div>
+            )}
           </div>
-          <div className={`${styles.chip} ${styles.chip2}`}>
-            <Icon name="devices" size={18} /> Веб-браузер · Android · iOS
-          </div>
-        </div>
+        )}
       </div>
       <div className="container">
-        <dl className={styles.stats}>
-          {HOME_STATS.map((s) => (
-            <div key={s.label} className={styles.stat}>
-              <dt className={styles.statValue}>{s.value}</dt>
-              <dd className={styles.statLabel}>{s.label}</dd>
-            </div>
-          ))}
-        </dl>
+        {h.stats.length > 0 && (
+          <dl className={styles.stats}>
+            {h.stats.map((st, i) => (
+              <div key={i} className={styles.stat}>
+                <dt className={styles.statValue}>{st.value}</dt>
+                <dd className={styles.statLabel}>{st.label}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
     </section>
   );
 }
 
+function ProductsSection() {
+  const site = useSite();
+  const s = usePage("home").sections.products;
+  return (
+    <Section id="products" tone="cream" eyebrow={s.eyebrow} title={s.title}>
+      <ul className={styles.products}>
+        {site.products.map((p, i) => {
+          const body = (
+            <>
+              <div className={styles.productTop}>
+                <span className={styles.productNum}>{String(i + 1).padStart(2, "0")}.</span>
+                {p.href && (
+                  <span className={styles.productArrow}>
+                    <Icon name="arrowUpRight" size={22} />
+                  </span>
+                )}
+              </div>
+              {p.image && <img className={styles.productImage} src={p.image.url} alt={p.image.alt} loading="lazy" width={p.image.width ?? undefined} height={p.image.height ?? undefined} />}
+              <h3 className={styles.productTitle}>{p.title}</h3>
+              <p className={styles.productText}>{p.excerpt}</p>
+              {p.href && p.linkLabel && <span className={styles.productLink}>{p.linkLabel}</span>}
+            </>
+          );
+          const cls = `${styles.product} ${i === 0 ? styles.productMain : ""}`;
+          return (
+            <li key={p.id} className="reveal">
+              {p.href ? (
+                <SmartLink to={p.href} className={cls}>
+                  {body}
+                </SmartLink>
+              ) : (
+                <div className={cls}>{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </Section>
+  );
+}
+
+function CasesSection() {
+  const site = useSite();
+  const s = usePage("home").sections.cases;
+  return (
+    <Section id="cases" eyebrow={s.eyebrow} title={s.title}>
+      {site.cases.length > 0 && (
+        <ul className={styles.cases}>
+          {site.cases.map((c) => {
+            const inner = (
+              <>
+                {c.cover && <img className={styles.caseCover} src={c.cover.url} alt={c.cover.alt || c.title} loading="lazy" />}
+                <span className={styles.caseText}>
+                  <span className={styles.caseName}>{c.title}</span>
+                  {c.excerpt && <span className={styles.caseExcerpt}>{c.excerpt}</span>}
+                </span>
+                <img src="/brand/symbol.png" alt="" aria-hidden="true" className={styles.caseMark} width={422} height={511} loading="lazy" />
+              </>
+            );
+            return (
+              <li key={c.id} className={`${styles.case} ${c.cover ? styles.caseWithCover : ""} reveal`}>
+                {c.hasPage ? (
+                  <Link to={detailPath("cases", c.slug)} className={styles.caseLink}>
+                    {inner}
+                  </Link>
+                ) : (
+                  inner
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      {site.partners.length > 0 && (
+        <>
+          <div id="partners" className={styles.partnersHead}>
+            <h2 id="partners-title" className={styles.partnersTitle}>
+              {s.partnersTitle}
+            </h2>
+          </div>
+          <ul className={styles.partners} aria-labelledby="partners-title">
+            {site.partners.map((p) => {
+              const content = p.logo ? <img src={p.logo.url} alt={p.logo.alt || p.name} className={styles.partnerLogo} loading="lazy" /> : p.name;
+              return (
+                <li key={p.id} className={`${styles.partner} reveal`} title={p.description || undefined}>
+                  {p.url ? (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" className={styles.partnerLink} aria-label={p.name}>
+                      {content}
+                    </a>
+                  ) : (
+                    content
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+    </Section>
+  );
+}
+
 function TrainingTabs() {
   const [active, setActive] = useState(0);
-  const dir = TRAINING_DIRECTIONS[active];
+  const site = useSite();
+  const s = usePage("home").sections.training;
+  const { requestHref } = useContacts();
+  const dirs = site.pages.training.sections.directions.items;
+  if (!dirs.length) return null;
+  const dir = dirs[Math.min(active, dirs.length - 1)];
   return (
-    <Section id="training" tone="cream" eyebrow="Обучение и консультация" title="Курсы, обучения, консультация, сопровождение">
+    <Section id="training" tone="cream" eyebrow={s.eyebrow} title={s.title}>
       <div className={`${styles.training} reveal`}>
         <div className={styles.trainingTabs} role="tablist" aria-label="Направления">
-          {TRAINING_DIRECTIONS.map((d, i) => (
+          {dirs.map((d, i) => (
             <button
-              key={d.id}
+              key={`${d.id}-${i}`}
               type="button"
               role="tab"
-              id={`tab-${d.id}`}
-              aria-selected={i === active}
-              aria-controls={`panel-${d.id}`}
-              className={`${styles.trainingTab} ${i === active ? styles.trainingTabActive : ""}`}
+              id={`tab-${i}`}
+              aria-selected={d === dir}
+              aria-controls="training-panel"
+              className={`${styles.trainingTab} ${d === dir ? styles.trainingTabActive : ""}`}
               onClick={() => setActive(i)}
             >
-              <span className={styles.trainingTabNum}>0{i + 1}</span>
+              <span className={styles.trainingTabNum}>{String(i + 1).padStart(2, "0")}</span>
               {d.title}
             </button>
           ))}
         </div>
-        <div className={styles.trainingPanel} role="tabpanel" id={`panel-${dir.id}`} aria-labelledby={`tab-${dir.id}`}>
+        <div className={styles.trainingPanel} role="tabpanel" id="training-panel" aria-labelledby={`tab-${dirs.indexOf(dir)}`}>
           <h3 className={styles.trainingTitle}>{dir.title}</h3>
-          <p className={styles.trainingLead}>{dir.lead}</p>
-          <ul className={styles.trainingList}>
-            {dir.items.map((it) => (
-              <li key={it}>
-                <Icon name="check" size={18} />
-                {it}
-              </li>
-            ))}
-          </ul>
+          {dir.lead && <p className={styles.trainingLead}>{dir.lead}</p>}
+          {dir.items.length > 0 && (
+            <ul className={styles.trainingList}>
+              {dir.items.map((it) => (
+                <li key={it}>
+                  <Icon name="check" size={18} />
+                  {it}
+                </li>
+              ))}
+            </ul>
+          )}
           <div className={styles.trainingActions}>
-            <Button to={`/obuchen/#${dir.id}`} variant="navy" icon={<Icon name="arrow" size={18} />}>
-              Подробнее
+            <Button to={`/obuchen/${dir.id ? `#${dir.id}` : ""}`} variant="navy" icon={<Icon name="arrow" size={18} />}>
+              {s.moreLabel}
             </Button>
             <Button to={requestHref(`${dir.title} — заявка`)} variant="outline">
-              Оставить заявку
+              {s.requestLabel}
             </Button>
           </div>
         </div>

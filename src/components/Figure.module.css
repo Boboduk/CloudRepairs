@@ -1,0 +1,13 @@
+.figure {
+  margin: 0;
+}
+.figure img {
+  width: 100%;
+  border-radius: var(--radius-l);
+  object-fit: cover;
+}
+.figure figcaption {
+  margin-top: 10px;
+  font-size: var(--fs-small);
+  color: var(--c-ink-soft);
+}

@@ -3,23 +3,47 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Новая версия сайта CloudRepairs — React + TypeScript + Vite, с пререндером страниц для SEO",
+  "description": "Сайт CloudRepairs с CMS: публичная часть (React SSR), админ-панель /admin, сервер Express + SQLite",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
-    "preview": "vite preview",
-    "typecheck": "tsc -b"
+    "dev": "tsx watch --clear-screen=false server/index.ts",
+    "build": "npm run typecheck && vite build --outDir dist/client && vite build --ssr src/entry-server.tsx --outDir dist/ssr && npm run build:server",
+    "build:server": "esbuild server/index.ts server/cli/create-admin.ts server/cli/backup.ts --bundle --platform=node --format=esm --packages=external --outdir=dist/server --outbase=server && node -e \"require('fs').cpSync('server/db/migrations','dist/server/db/migrations',{recursive:true})\"",
+    "start": "NODE_ENV=production node dist/server/index.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "admin:create": "tsx server/cli/create-admin.ts",
+    "admin:create:prod": "NODE_ENV=production node dist/server/cli/create-admin.js",
+    "backup": "tsx server/cli/backup.ts",
+    "backup:prod": "NODE_ENV=production node dist/server/cli/backup.js",
+    "test": "node --test --import tsx tests/*.test.ts"
   },
   "dependencies": {
+    "@tiptap/extension-image": "^2.12.0",
+    "@tiptap/extension-link": "^2.12.0",
+    "@tiptap/pm": "^2.12.0",
+    "@tiptap/react": "^2.12.0",
+    "@tiptap/starter-kit": "^2.12.0",
+    "better-sqlite3": "^11.10.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router-dom": "6.28.0"
+    "react-router-dom": "6.28.0",
+    "sanitize-html": "^2.17.0",
+    "sharp": "^0.33.5",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/multer": "^1.4.13",
     "@types/node": "20.14.10",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
+    "@types/sanitize-html": "^2.16.0",
     "@vitejs/plugin-react": "4.3.4",
+    "esbuild": "^0.25.5",
+    "tsx": "^4.19.4",
     "typescript": "5.6.3",
     "vite": "5.4.11"
   }
