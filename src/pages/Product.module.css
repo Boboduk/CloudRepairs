@@ -192,6 +192,19 @@
 .functionWide .functionBody {
   grid-area: body;
 }
+/* скриншоты разных размеров в карусели — в рамках одной высоты */
+/* тень рамки компактнее: широкую тень обрезает область прокрутки карусели */
+.shotCarousel figure {
+  box-shadow: 0 10px 24px -14px rgba(8, 39, 101, 0.35);
+}
+.shotCarousel figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  object-position: top center;
+}
 .functionImage {
   grid-area: image;
 }

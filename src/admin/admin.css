@@ -943,6 +943,10 @@ h3 {
 .a-list-row .a-textarea {
   min-height: 42px;
 }
+.a-autosize {
+  field-sizing: content;
+  max-height: 320px;
+}
 .a-row-tools {
   display: flex;
   gap: 4px;
@@ -975,6 +979,15 @@ h3 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.a-item-thumb {
+  flex-shrink: 0;
+  width: 48px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--a-line);
+  background: var(--a-bg);
 }
 .a-item > summary .a-item-num {
   color: var(--a-faint);

@@ -5,6 +5,7 @@ import { Icon } from "../components/Icon";
 import { Section } from "../components/Section";
 import { SubNav } from "../components/SubNav";
 import { BrowserFrame } from "../components/BrowserFrame";
+import { Carousel } from "../components/Carousel";
 import { CtaBand } from "../components/CtaBand";
 import { useContacts, usePage } from "../data/SiteData";
 import styles from "./Product.module.css";
@@ -86,8 +87,10 @@ export default function ProductPage() {
         )}
 
         <div className={styles.functions}>
-          {s.functions.items.map((f, i) => (
-            <article key={`${f.title}-${i}`} className={`${styles.function} ${f.image ? styles.functionWide : ""} reveal`}>
+          {s.functions.items.map((f, i) => {
+            const shots = (f.images ?? []).filter((im) => im.image);
+            return (
+            <article key={`${f.title}-${i}`} className={`${styles.function} ${shots.length ? styles.functionWide : ""} reveal`}>
               <div className={styles.functionHead}>
                 <span className={styles.functionNum}>{String(i + 1).padStart(2, "0")}</span>
                 <h3 className={styles.functionTitle}>{f.title}</h3>
@@ -97,13 +100,18 @@ export default function ProductPage() {
                   <p key={j}>{t}</p>
                 ))}
               </div>
-              {f.image && (
+              {shots.length > 0 && (
                 <div className={styles.functionImage}>
-                  <BrowserFrame src={f.image} alt={f.imageAlt || f.title} />
+                  {shots.length === 1 ? (
+                    <BrowserFrame src={shots[0].image} alt={shots[0].alt || f.title} />
+                  ) : (
+                    <Carousel className={styles.shotCarousel} label={`Скриншоты: ${f.title}`} items={shots.map((im, j) => <BrowserFrame key={j} src={im.image} alt={im.alt || `${f.title} — экран ${j + 1}`} />)} />
+                  )}
                 </div>
               )}
             </article>
-          ))}
+            );
+          })}
         </div>
 
         <div className={`${styles.potential} reveal`}>

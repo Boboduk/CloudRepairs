@@ -372,6 +372,67 @@ describe("Партнёры, кейсы, продукты", () => {
   });
 });
 
+describe("Кейсы на главной, страница кейсов, карусели", () => {
+  const c = new Client();
+  before(async () => {
+    await c.login();
+  });
+
+  test("на главной первые 3 кейса и кнопка «Все кейсы», на /cases/ — все", async () => {
+    const created: number[] = [];
+    for (const title of ["Кейс номер четыре", "Кейс номер пять"]) {
+      const r = await c.req("POST", "/api/admin/cases", { title, status: "published" });
+      assert.equal(r.status, 201);
+      created.push(r.json.id);
+    }
+    const site = (await c.req("GET", "/api/public/site")).json;
+    assert.ok(site.cases.length >= 5);
+    // только разметка страницы, без встроенных данных для гидратации
+    const home = (await page("/")).html.replace(/<script id="__DATA__"[\s\S]*?<\/script>/, "");
+    assert.match(home, /href="\/cases\/"/);
+    assert.match(home, />Все кейсы</);
+    assert.match(home, new RegExp(site.cases[2].title));
+    assert.doesNotMatch(home, /Кейс номер пять/);
+    const list = await page("/cases/");
+    assert.equal(list.status, 200);
+    assert.match(list.html, /<title>Кейсы/);
+    for (const cs of site.cases) assert.match(list.html, new RegExp(cs.title));
+    assert.match((await page("/sitemap.xml")).html, /\/cases\/</);
+    for (const id of created) await c.req("DELETE", `/api/admin/cases/${id}`);
+  });
+
+  test("партнёры на главной и «О нас» показаны каруселью", async () => {
+    for (const url of ["/", "/about/"]) {
+      const html = (await page(url)).html;
+      assert.match(html, /aria-roledescription="карусель"/, url);
+    }
+  });
+
+  test("несколько скриншотов функции — карусель на странице продукта", async () => {
+    const up = await c.req("POST", "/api/admin/media", undefined, { form: await pngFile("shot2.png") });
+    const cur = (await c.req("GET", "/api/admin/pages/product")).json;
+    const f = cur.sections.functions.items[0];
+    assert.ok(Array.isArray(f.images) && f.images.length === 1, "первый скриншот перенесён в список");
+    f.images.push({ image: up.json.url, alt: "Второй экран" });
+    const r = await c.req("PUT", "/api/admin/pages/product", { sections: cur.sections, order: cur.order, seoTitle: cur.seoTitle, seoDescription: cur.seoDescription });
+    assert.equal(r.status, 200, JSON.stringify(r.json));
+    const html = (await page("/vnutyankaya-training/")).html;
+    assert.match(html, new RegExp(`aria-label="Скриншоты: ${f.title}"`));
+    assert.match(html, /Второй экран/);
+  });
+
+  test("старый формат (одно изображение у функции) читается как список", async () => {
+    const { default: Database } = await import("better-sqlite3");
+    const db = new Database(path.join(DATA_DIR, "cloudrepairs.db"));
+    const legacy = { functions: { items: [{ title: "Старая функция", text: ["Текст"], image: "/img/ui-equipment-catalog.png", imageAlt: "Старый скриншот" }] } };
+    db.prepare("INSERT INTO pages (key, content, section_order, seo_title, seo_description, updated_at) VALUES ('product', ?, '[]', '', '', ?) ON CONFLICT(key) DO UPDATE SET content = excluded.content").run(JSON.stringify(legacy), new Date().toISOString());
+    db.close();
+    const cur = (await c.req("GET", "/api/admin/pages/product")).json;
+    assert.deepEqual(cur.sections.functions.items[0].images, [{ image: "/img/ui-equipment-catalog.png", alt: "Старый скриншот" }]);
+    assert.match((await page("/vnutyankaya-training/")).html, /Старый скриншот/);
+  });
+});
+
 describe("Тексты страниц", () => {
   const c = new Client();
   before(async () => {

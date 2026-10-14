@@ -5,6 +5,7 @@ import TrainingPage from "./pages/TrainingPage";
 import AboutPage from "./pages/AboutPage";
 import ProductPage from "./pages/ProductPage";
 import NewsListPage from "./pages/NewsListPage";
+import CasesListPage from "./pages/CasesListPage";
 import { CasePage, NewsPage, ProductDetailPage } from "./pages/DetailPages";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -21,6 +22,7 @@ export function App() {
         <Route path="vnutyankaya-training" element={<ProductPage />} />
         <Route path="news" element={<NewsListPage />} />
         <Route path="news/:slug" element={<NewsPage />} />
+        <Route path="cases" element={<CasesListPage />} />
         <Route path="cases/:slug" element={<CasePage />} />
         <Route path="products/:slug" element={<ProductDetailPage />} />
         <Route path="*" element={<NotFoundPage />} />

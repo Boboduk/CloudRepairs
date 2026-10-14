@@ -153,7 +153,7 @@ async function main() {
 
   app.get("/sitemap.xml", (_req, res) => {
     const { data } = loadInitialData(db, "/");
-    const urls = ["/", "/vnutyankaya-training/", "/obuchen/", "/about/", "/news/"];
+    const urls = ["/", "/vnutyankaya-training/", "/obuchen/", "/about/", "/news/", "/cases/"];
     data.site.news.forEach((n) => urls.push(`/news/${n.slug}/`));
     data.site.cases.filter((c) => c.hasPage).forEach((c) => urls.push(`/cases/${c.slug}/`));
     data.site.products.filter((p) => p.href?.startsWith("/products/")).forEach((p) => urls.push(p.href!));

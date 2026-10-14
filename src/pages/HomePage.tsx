@@ -8,8 +8,8 @@ import { BrowserFrame } from "../components/BrowserFrame";
 import { CtaBand } from "../components/CtaBand";
 import { SmartLink } from "../components/SmartLink";
 import { NewsCard } from "../components/NewsCard";
+import { CasesGrid, PartnersCarousel } from "../components/Cases";
 import { useContacts, usePage, useSite } from "../data/SiteData";
-import { detailPath } from "../../shared/routes";
 import styles from "./Home.module.css";
 
 export default function HomePage() {
@@ -212,35 +212,21 @@ function ProductsSection() {
 function CasesSection() {
   const site = useSite();
   const s = usePage("home").sections.cases;
+  if (!site.cases.length && !site.partners.length) return null;
   return (
-    <Section id="cases" eyebrow={s.eyebrow} title={s.title}>
-      {site.cases.length > 0 && (
-        <ul className={styles.cases}>
-          {site.cases.map((c) => {
-            const inner = (
-              <>
-                {c.cover && <img className={styles.caseCover} src={c.cover.url} alt={c.cover.alt || c.title} loading="lazy" />}
-                <span className={styles.caseText}>
-                  <span className={styles.caseName}>{c.title}</span>
-                  {c.excerpt && <span className={styles.caseExcerpt}>{c.excerpt}</span>}
-                </span>
-                <img src="/brand/symbol.png" alt="" aria-hidden="true" className={styles.caseMark} width={422} height={511} loading="lazy" />
-              </>
-            );
-            return (
-              <li key={c.id} className={`${styles.case} ${c.cover ? styles.caseWithCover : ""} reveal`}>
-                {c.hasPage ? (
-                  <Link to={detailPath("cases", c.slug)} className={styles.caseLink}>
-                    {inner}
-                  </Link>
-                ) : (
-                  inner
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+    <Section
+      id="cases"
+      eyebrow={s.eyebrow}
+      title={s.title}
+      aside={
+        site.cases.length > 0 ? (
+          <Button to="/cases/" variant="outline" icon={<Icon name="arrow" size={18} />}>
+            {s.allLabel || "Все кейсы"}
+          </Button>
+        ) : undefined
+      }
+    >
+      <CasesGrid cases={site.cases.slice(0, 3)} />
 
       {site.partners.length > 0 && (
         <>
@@ -249,22 +235,9 @@ function CasesSection() {
               {s.partnersTitle}
             </h2>
           </div>
-          <ul className={styles.partners} aria-labelledby="partners-title">
-            {site.partners.map((p) => {
-              const content = p.logo ? <img src={p.logo.url} alt={p.logo.alt || p.name} className={styles.partnerLogo} loading="lazy" /> : p.name;
-              return (
-                <li key={p.id} className={`${styles.partner} reveal`} title={p.description || undefined}>
-                  {p.url ? (
-                    <a href={p.url} target="_blank" rel="noopener noreferrer" className={styles.partnerLink} aria-label={p.name}>
-                      {content}
-                    </a>
-                  ) : (
-                    content
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="reveal">
+            <PartnersCarousel partners={site.partners} label={s.partnersTitle || "Партнеры"} />
+          </div>
         </>
       )}
     </Section>

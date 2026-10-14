@@ -100,7 +100,7 @@ function StringsInput({
         {value.map((s, i) => (
           <div key={i} className="a-list-row">
             {field.multiline ? (
-              <textarea className="a-textarea" rows={1} value={s} aria-label={`${itemLabel} ${i + 1}`} onChange={(e) => onChange(value.map((x, j) => (j === i ? e.target.value : x)))} />
+              <textarea className="a-textarea a-autosize" rows={Math.min(8, Math.max(2, Math.ceil(s.length / 70)))} value={s} aria-label={`${itemLabel} ${i + 1}`} onChange={(e) => onChange(value.map((x, j) => (j === i ? e.target.value : x)))} />
             ) : (
               <input className="a-input" value={s} aria-label={`${itemLabel} ${i + 1}`} onChange={(e) => onChange(value.map((x, j) => (j === i ? e.target.value : x)))} />
             )}
@@ -151,12 +151,15 @@ function ItemsInput({
       <div className="a-items">
         {value.map((item, i) => {
           const title = field.titleKey ? str(item[field.titleKey]) : "";
+          const imageKey = field.fields.find((f) => f.type === "image")?.key;
+          const thumb = imageKey ? str(item[imageKey]) : "";
           return (
             <details key={i} className="a-item" open={hasError(i) || undefined}>
               <summary>
                 <span className="a-item-num">{i + 1}.</span>
+                {imageKey && (thumb ? <img className="a-item-thumb" src={thumb} alt="" /> : <span className="a-item-thumb" aria-hidden="true" />)}
                 <span className="a-item-title" style={hasError(i) ? { color: "var(--a-red)" } : undefined}>
-                  {title || `${field.itemLabel} без названия`}
+                  {title || (thumb ? field.itemLabel : `${field.itemLabel} без названия`)}
                 </span>
                 <span className="a-row-tools" onClick={(e) => e.preventDefault()}>
                   <MoveButtons index={i} length={value.length} onMove={(d) => onChange(move(value, i, d))} label={title || `${field.itemLabel} ${i + 1}`} />
@@ -182,6 +185,7 @@ function ItemsInput({
       <button type="button" className="a-btn a-btn-sm" style={{ marginTop: 8 }} disabled={value.length >= max} onClick={() => onChange([...value, emptyItem(field.fields)])}>
         <Icon name="plus" size={15} /> Добавить: {field.itemLabel.toLowerCase()}
       </button>
+      {field.help && <div className="a-hint">{field.help}</div>}
     </div>
   );
 }

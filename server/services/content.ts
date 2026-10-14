@@ -2,6 +2,7 @@ import type { DB } from "../db";
 import { DEFAULT_PAGES, DEFAULT_SETTINGS, type SiteSettings } from "../../shared/defaults";
 import { PAGE_SCHEMAS, type PageKey } from "../../shared/schema";
 import { mergeWithDefaults, normalizeOrder } from "../../shared/validatePage";
+import { upgradeStoredPage } from "../../shared/upgrade";
 import { detailPath } from "../../shared/routes";
 import type { CaseItem, CaseLink, CaseListItem, NewsItem, NewsListItem, PageData, Partner, ProductItem, ProductListItem, SiteData } from "../../shared/types";
 import { getMediaRef, toMediaRef, type MediaRow } from "./media";
@@ -33,7 +34,7 @@ export function getPage(db: DB, key: PageKey): PageData<Record<string, Record<st
   const schema = PAGE_SCHEMAS[key];
   const def = DEFAULT_PAGES[key];
   return {
-    sections: mergeWithDefaults(schema, safeJson(row?.content, undefined), def.sections),
+    sections: mergeWithDefaults(schema, upgradeStoredPage(key, safeJson(row?.content, undefined)), def.sections),
     order: normalizeOrder(schema, safeJson(row?.section_order, schema.orderable)),
     seoTitle: row?.seo_title || def.seoTitle,
     seoDescription: row?.seo_description || def.seoDescription,

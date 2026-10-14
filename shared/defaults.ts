@@ -39,7 +39,7 @@ export const DEFAULT_HOME = {
   industries: { eyebrow: "Область применения", title: "Мульти-отраслевое решение" },
   training: { eyebrow: "Обучение и консультация", title: "Курсы, обучения, консультация, сопровождение", moreLabel: "Подробнее", requestLabel: "Оставить заявку" },
   news: { eyebrow: "Новости", title: "Все о мире управления основными фондами", allLabel: "Все новости" },
-  cases: { eyebrow: "Кейсы", title: "Нам доверяют", partnersTitle: "Партнеры" },
+  cases: { eyebrow: "Кейсы", title: "Нам доверяют", allLabel: "Все кейсы", partnersTitle: "Партнеры" },
   cta: { text: "Остались вопросы? Просто задайте их нам", requestLabel: "Оставить заявку", telegramLabel: "Написать в Телеграм" },
 };
 
@@ -90,8 +90,7 @@ export const DEFAULT_PRODUCT = {
     items: P.FUNCTIONS.map((f) => ({
       title: f.title,
       text: [...f.text],
-      image: "image" in f && f.image ? f.image.src : "",
-      imageAlt: "image" in f && f.image ? f.image.alt : "",
+      images: "image" in f && f.image ? [{ image: f.image.src, alt: f.image.alt }] : [],
     })),
   },
   potential: {

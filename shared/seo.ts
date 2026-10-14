@@ -27,6 +27,12 @@ export function seoFor(path: string, site: SiteData, detail: InitialData["detail
         description: "Все о мире управления основными фондами, тех. обслуживаний и ремонтов, производственные практики.",
         path: "/news/",
       };
+    case "cases-list":
+      return {
+        title: `Кейсы${SUFFIX}`,
+        description: "Проекты внедрения CloudRepairs: как предприятия автоматизируют техническое обслуживание и ремонты оборудования.",
+        path: "/cases/",
+      };
     case "detail": {
       const item = detail?.kind === route.detail && detail.slug === route.slug ? detail.item : null;
       if (!item) return notFound(path);

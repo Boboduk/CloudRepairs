@@ -7,6 +7,7 @@ import { Section } from "../components/Section";
 import { CtaBand } from "../components/CtaBand";
 import { Figure } from "../components/Figure";
 import { SmartLink } from "../components/SmartLink";
+import { PartnersCarousel } from "../components/Cases";
 import { usePage, useSite } from "../data/SiteData";
 import { detailPath } from "../../shared/routes";
 import styles from "./pages.module.css";
@@ -51,36 +52,22 @@ export default function AboutPage() {
     partners:
       site.cases.length || site.partners.length ? (
         <Section key="partners" id="cases-partners" eyebrow={partners.eyebrow} title={partners.title}>
-          <div className={styles.logoGroups}>
-            {site.cases.length > 0 && (
-              <div className="reveal">
-                <p className={styles.groupLabel}>{partners.casesLabel}</p>
-                <ul className={styles.nameList}>
-                  {site.cases.map((c) => (
-                    <li key={c.id}>{c.hasPage ? <SmartLink to={detailPath("cases", c.slug)}>{c.title}</SmartLink> : c.title}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {site.partners.length > 0 && (
-              <div className="reveal">
-                <p className={styles.groupLabel}>{partners.partnersLabel}</p>
-                <ul className={styles.nameList}>
-                  {site.partners.map((p) => (
-                    <li key={p.id}>
-                      {p.url ? (
-                        <a href={p.url} target="_blank" rel="noopener noreferrer">
-                          {p.name}
-                        </a>
-                      ) : (
-                        p.name
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
+          {site.cases.length > 0 && (
+            <div className="reveal">
+              <p className={styles.groupLabel}>{partners.casesLabel}</p>
+              <ul className={`${styles.nameList} ${styles.nameGrid}`}>
+                {site.cases.map((c) => (
+                  <li key={c.id}>{c.hasPage ? <SmartLink to={detailPath("cases", c.slug)}>{c.title}</SmartLink> : c.title}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {site.partners.length > 0 && (
+            <div className={`${styles.partnersBlock} reveal`}>
+              <p className={styles.groupLabel}>{partners.partnersLabel}</p>
+              <PartnersCarousel partners={site.partners} label={partners.partnersLabel || "Партнеры"} />
+            </div>
+          )}
         </Section>
       ) : null,
   };

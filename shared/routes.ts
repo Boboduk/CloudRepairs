@@ -4,6 +4,7 @@ import type { DetailKind, PageKey } from "./types";
 export type ResolvedRoute =
   | { kind: "page"; page: PageKey }
   | { kind: "news-list" }
+  | { kind: "cases-list" }
   | { kind: "detail"; detail: DetailKind; slug: string }
   | { kind: "not-found" };
 
@@ -16,6 +17,7 @@ export function resolveRoute(pathname: string): ResolvedRoute {
   if (p === "/about/") return { kind: "page", page: "about" };
   if (p === "/vnutyankaya-training/") return { kind: "page", page: "product" };
   if (p === "/news/") return { kind: "news-list" };
+  if (p === "/cases/") return { kind: "cases-list" };
   for (const [prefix, detail] of [
     ["news", "news"],
     ["cases", "cases"],

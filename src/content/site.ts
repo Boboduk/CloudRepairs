@@ -25,7 +25,7 @@ export interface NavItem {
 export const NAV: NavItem[] = [
   { label: "Продукт", to: "/vnutyankaya-training/" },
   { label: "Обучение", to: "/obuchen/" },
-  { label: "Кейсы", to: "/#cases" },
+  { label: "Кейсы", to: "/cases/" },
   { label: "О нас", to: "/about/" },
   { label: "Партнеры", to: "/#partners" },
   { label: "Контакты", to: "#contacts" },

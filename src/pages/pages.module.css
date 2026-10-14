@@ -175,6 +175,12 @@
   font-weight: 500;
   color: var(--c-navy);
 }
+.nameGrid {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.partnersBlock {
+  margin-top: clamp(32px, 4vw, 56px);
+}
 .nameList a {
   color: inherit;
   text-decoration: none;

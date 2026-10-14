@@ -1,0 +1,122 @@
+.carousel {
+  --gap: 16px;
+  position: relative;
+  min-width: 0;
+}
+.track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - var(--gap) * (var(--per) - 1)) / var(--per));
+  column-gap: var(--gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* место для теней карточек: overflow обрезает их */
+  padding: 10px 4px 40px;
+  margin: -10px -4px -40px;
+  scroll-padding-inline: 4px;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+.track:focus-visible {
+  outline: 3px solid var(--c-sky);
+  outline-offset: 4px;
+}
+.slide {
+  display: flex;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.slide > * {
+  width: 100%;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  position: relative;
+  margin-top: 18px;
+}
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--c-navy);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+.arrow:hover:not(:disabled) {
+  background: var(--c-lime);
+  border-color: var(--c-lime);
+}
+.arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+}
+.dot {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  position: relative;
+}
+.dot::before {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  background: var(--c-line);
+  transition: width 0.25s, background-color 0.25s;
+}
+.dotActive::before {
+  width: 22px;
+  background: var(--c-navy);
+}
+.dark .arrow {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+.dark .arrow:hover:not(:disabled) {
+  color: var(--c-navy);
+}
+.dark .dot::before {
+  background: rgba(255, 255, 255, 0.3);
+}
+.dark .dotActive::before {
+  background: var(--c-lime);
+}
+@media (max-width: 960px) {
+  .track {
+    grid-auto-columns: calc((100% - var(--gap) * (var(--per-md) - 1)) / var(--per-md));
+  }
+}
+@media (max-width: 640px) {
+  .carousel {
+    --gap: 12px;
+  }
+  .track {
+    grid-auto-columns: calc((100% - var(--gap) * (var(--per-sm) - 1)) / var(--per-sm));
+  }
+}
